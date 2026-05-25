@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import emailjs from "@emailjs/browser";
 import { MessageCircle, Heart, CodeXml, Citrus } from "lucide-react";
 
@@ -19,30 +19,35 @@ const telegramSVG = (
 const commonClass =
   "input border-0 border-b-2 focus:outline-none focus:placeholder:text-green-500 placeholder:text-sm md:placeholder:text-base focus:border-green-500 border-green-200 w-full rounded-none px-0 bg-transparent";
 
-const Footer = () => {
-  const [loading, setLoading] = useState(false);
-  const [msg, setMsg] = useState("");
-  const handleSubmit = (e) => {
+export default function Footer() {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [msg, setMsg] = useState<string>("");
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
-    const messageField = e.target.message;
+    const form = e.currentTarget;
+
+    const messageField = form.elements.namedItem(
+      "message"
+    ) as HTMLTextAreaElement;
 
     messageField.value =
-      `${messageField.value}\n\nFrom: Fruit Shop Project`;
+      `${messageField.value}\n\nFrom: Fruit Shop Project 🍉`;
 
     emailjs
       .sendForm(
         "service_pn3xdhk",
         "template_94ha19c",
-        e.target,
+        form,
         "hpMhH2qqsBm1j2sbh"
       )
       .then(
         () => {
-          setMsg("Message sent successfully");
+          setMsg("Message sent successfully 🍉");
           setLoading(false);
-          e.target.reset();
+          form.reset();
         },
         (error) => {
           console.log(error);
@@ -51,9 +56,15 @@ const Footer = () => {
         }
       );
   };
+
+  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const el = e.target;
+    el.style.height = "auto";
+    el.style.height = el.scrollHeight + "px";
+  };
+
   return (
     <footer className="bg-gradient-to-r from-green-50 to-lime-50 border-t border-green-100 mt-20">
-
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-14">
 
         {/* TOP */}
@@ -66,12 +77,12 @@ const Footer = () => {
             </h2>
 
             <p className="text-gray-600 mt-5 text-sm md:text-lg leading-relaxed">
-              Need a modern website, dashboard, eCommerce store,
-              portfolio, or mobile app for your business?
+              Need a modern website, dashboard, eCommerce store, portfolio, or mobile app?
               I’m available for freelance projects and collaborations.
-              <CodeXml size={20} className="inline-block ml-2 mb-1 text-green-500" />
+              <CodeXml size={18} className="inline-block ml-2 text-green-500" />
+
               <span className="font-semibold text-green-600">
-                {" "}— Fruit Shop Project <Citrus className="inline-block ml-2 mb-1 text-green-500" />
+                {" "}— Shah G Fruit Shop <Citrus size={16} className="inline-block ml-1 text-green-500" />
               </span>
             </p>
 
@@ -86,6 +97,7 @@ const Footer = () => {
             </a>
           </div>
 
+          {/* FORM */}
           <div className="bg-white rounded-3xl shadow-xl border border-green-100 p-6 md:p-8">
 
             <h3 className="text-2xl font-bold text-gray-800 mb-6">
@@ -114,14 +126,10 @@ const Footer = () => {
                 name="message"
                 placeholder="Tell me about your project..."
                 rows={3}
-                onInput={(e) => {
-                  e.target.style.height = "auto";
-                  e.target.style.height =
-                    e.target.scrollHeight + "px";
-                }}
+                onInput={handleInput}
                 className={`${commonClass} resize-none overflow-hidden`}
                 required
-              ></textarea>
+              />
 
               <button
                 type="submit"
@@ -136,16 +144,17 @@ const Footer = () => {
             {msg && (
               <p className="text-center mt-4 text-sm font-medium text-green-600 flex items-center justify-center gap-2">
                 {msg}
-                <Citrus className="text-green-500" size={18} />
+                <Citrus size={18} className="text-green-500" />
               </p>
             )}
           </div>
         </div>
 
+        {/* BOTTOM */}
         <div className="border-t border-green-100 mt-12 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
 
           <p className="text-gray-500 text-sm text-center md:text-left">
-            © 2026 Fruit Shop. All rights reserved.
+            © 2026 Shah G Fruit Shop. All rights reserved.
           </p>
 
           <p className="flex items-center gap-2 text-sm text-gray-500">
@@ -153,9 +162,8 @@ const Footer = () => {
             by <span className="font-semibold text-green-600">Waqas Ali</span>
           </p>
         </div>
+
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}
