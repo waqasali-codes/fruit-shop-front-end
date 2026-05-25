@@ -126,7 +126,7 @@ export default function Footer() {
                 name="message"
                 placeholder="Tell me about your project..."
                 rows={3}
-                onInput={handleInput}
+                onChange={handleInput}
                 className={`${commonClass} resize-none overflow-hidden`}
                 required
               />
