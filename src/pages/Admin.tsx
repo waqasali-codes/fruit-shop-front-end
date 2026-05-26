@@ -24,7 +24,6 @@ const Admin = () => {
   const [price, setPrice] = useState<number>(0);
   const [file, setFile] = useState<File | null>(null);
 
-  // 🔥 DEFAULT UNIT
   const [unit, setUnit] = useState("kg");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedFruitId, setSelectedFruitId] = useState("");
@@ -32,7 +31,6 @@ const Admin = () => {
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(true);
 
-  // 🔥 Check token
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -41,7 +39,6 @@ const Admin = () => {
     }
   }, []);
 
-  // 🔥 Fetch fruits
   const fetchFruits = async () => {
     try {
       setFetchLoading(true);
@@ -62,11 +59,9 @@ const Admin = () => {
     fetchFruits();
   }, []);
 
-  // 🔥 Add Fruit
   const addFruit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // VALIDATIONS
     if (!name.trim()) {
       toast.error("Fruit name is required");
       return;
@@ -91,7 +86,6 @@ const Admin = () => {
       formData.append("price", String(price));
       formData.append("image", file);
 
-      // 🔥 UNIT
       formData.append("unit", unit);
 
       await api.post("/api/fruits", formData, {
@@ -102,12 +96,10 @@ const Admin = () => {
 
       toast.success("Fruit added successfully 🍎");
 
-      // RESET
       setName("");
       setPrice(0);
       setFile(null);
 
-      // DEFAULT AGAIN
       setUnit("kg");
 
       fetchFruits();
@@ -120,7 +112,6 @@ const Admin = () => {
     }
   };
 
-  // 🔥 Delete Fruit
   const deleteFruit = (id: string) => {
     setSelectedFruitId(id);
     setShowDeleteModal(true);
@@ -156,7 +147,6 @@ const Admin = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">
 
-      {/* HEADER */}
       <div className="flex items-center gap-3 mb-8">
 
         <div className="bg-green-100 p-3 rounded-full">
@@ -179,7 +169,6 @@ const Admin = () => {
 
       </div>
 
-      {/* FORM */}
       <form
         onSubmit={addFruit}
         className="bg-white rounded-2xl shadow-lg p-6 mb-10"
@@ -191,7 +180,6 @@ const Admin = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-          {/* NAME */}
           <div>
             <label className="text-sm text-gray-500">
               Fruit Name
@@ -210,7 +198,6 @@ const Admin = () => {
             </div>
           </div>
 
-          {/* PRICE */}
           <div>
             <label className="text-sm text-gray-500">
               Price
@@ -235,7 +222,6 @@ const Admin = () => {
             </div>
           </div>
 
-          {/* IMAGE */}
           <div>
             <label className="text-sm text-gray-500">
               Fruit Image
@@ -272,7 +258,6 @@ const Admin = () => {
 
         </div>
 
-        {/* UNIT SELECTION */}
         <div className="mt-6">
 
           <label className="text-sm text-gray-500 flex items-center gap-2">
@@ -282,7 +267,6 @@ const Admin = () => {
 
           <div className="flex items-center gap-6 mt-3">
 
-            {/* KG */}
             <label className="flex items-center gap-2 cursor-pointer bg-gray-100 px-4 py-2 rounded-lg">
 
               <input
@@ -296,7 +280,6 @@ const Admin = () => {
 
             </label>
 
-            {/* DOZEN */}
             <label className="flex items-center gap-2 cursor-pointer bg-gray-100 px-4 py-2 rounded-lg">
 
               <input
@@ -307,6 +290,18 @@ const Admin = () => {
               />
 
               <span>Per Dozen</span>
+
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer bg-gray-100 px-4 py-2 rounded-lg">
+
+              <input
+                type="radio"
+                value="piece"
+                checked={unit === "piece"}
+                onChange={(e) => setUnit(e.target.value)}
+              />
+
+              <span>Per Piece</span>
 
             </label>
 
